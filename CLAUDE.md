@@ -30,6 +30,14 @@ Qualquer coisa além disso (parsing de linguagem natural, notificações em temp
 
 Cada pessoa é dona do próprio módulo (arquivo `.c`/`.h`) e escreve nele sem depender dos outros módulos estarem prontos — combinem a `struct Evento` (campos e tipos) logo na Semana 1 para todo mundo compilar contra a mesma interface.
 
+## Regras para quem usar CLI de IA (Claude Code e afins)
+
+Se você abrir uma CLI de IA neste projeto, ela vai ler este arquivo — e antes de escrever qualquer código deve:
+
+1. Perguntar ao usuário: **qual é a sua branch** e **qual é a sua task/card do Trello**.
+2. Fazer **somente** o que está descrito nessa task — nada a mais, nada a menos. Não implementar módulo de outro integrante, não adiantar tarefa de outra pessoa, não fazer refactor ou "melhoria" que não foi pedida.
+3. Seguir sempre as boas práticas de C descritas em [`BOAS_PRATICAS_C.md`](./BOAS_PRATICAS_C.md) (estrutura de pastas, nomenclatura, flags de compilação, memória, etc.).
+
 ## Estrutura de pastas sugerida
 
 ```
