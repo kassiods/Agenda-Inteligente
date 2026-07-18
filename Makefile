@@ -1,8 +1,10 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Iinclude
+CFLAGS = -std=c11 -Wall -Wextra -Iinclude
 SRC = $(wildcard src/*.c)
 OBJ = $(SRC:.c=.o)
 TARGET = agenda
+
+all: $(TARGET)
 
 $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ)
@@ -10,7 +12,11 @@ $(TARGET): $(OBJ)
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-clean:
-	rm -f $(OBJ) $(TARGET)
+test: $(OBJ)
+	$(CC) $(CFLAGS) -o test_runner tests/test_busca_validacao.c src/busca.c src/validacao.c
+	./test_runner
 
-.PHONY: clean
+clean:
+	rm -f src/*.o $(TARGET) test_runner test_runner.exe agenda.exe
+
+.PHONY: all clean test
