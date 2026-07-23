@@ -107,6 +107,77 @@ static void test_busca(void)
     printf("[PASS] test_busca\n");
 }
 
+static void test_busca_resultado_vazio(void)
+{
+    Evento lista[3] = {
+        {1, "Reuniao do Trabalho", 16, 7, 2026, 14, 30, 1},
+        {2, "Prova de Calculo", 18, 7, 2026, 8, 0, 1},
+        {3, "Ir ao mercado", 16, 7, 2026, 18, 0, 3}
+    };
+
+    Evento res[10];
+
+    /* Data sem nenhum evento cadastrado */
+    int n = busca_por_data(lista, 3, 1, 1, 2020, res, 10);
+    assert(n == 0);
+
+    /* Prioridade sem nenhum evento */
+    n = busca_por_prioridade(lista, 3, 2, res, 10);
+    assert(n == 0);
+
+    /* Palavra-chave que nao aparece em nenhum titulo */
+    n = busca_por_palavra_chave(lista, 3, "viagem", res, 10);
+    assert(n == 0);
+
+    /* Intervalo de datas fora do range de qualquer evento */
+    n = busca_por_intervalo_datas(lista, 3, 1, 1, 2030, 31, 12, 2030, res, 10);
+    assert(n == 0);
+
+    /* Lista vazia (qtd = 0) */
+    n = busca_por_data(lista, 0, 16, 7, 2026, res, 10);
+    assert(n == 0);
+
+    printf("[PASS] test_busca_resultado_vazio\n");
+}
+
+static void test_busca_multiplos_resultados_todos(void)
+{
+    Evento lista[3] = {
+        {1, "Reuniao do Trabalho", 16, 7, 2026, 14, 30, 1},
+        {2, "Prova de Calculo", 18, 7, 2026, 8, 0, 1},
+        {3, "Ir ao mercado", 16, 7, 2026, 18, 0, 3}
+    };
+
+    Evento res[10];
+
+    /* Intervalo que cobre todos os eventos cadastrados */
+    int n = busca_por_intervalo_datas(lista, 3, 16, 7, 2026, 18, 7, 2026, res, 10);
+    assert(n == 3);
+    assert(res[0].id == 1);
+    assert(res[1].id == 2);
+    assert(res[2].id == 3);
+
+    printf("[PASS] test_busca_multiplos_resultados_todos\n");
+}
+
+static void test_busca_limite_max_resultado(void)
+{
+    Evento lista[3] = {
+        {1, "Reuniao do Trabalho", 16, 7, 2026, 14, 30, 1},
+        {2, "Prova de Calculo", 18, 7, 2026, 8, 0, 1},
+        {3, "Ir ao mercado", 16, 7, 2026, 18, 0, 3}
+    };
+
+    Evento res[1];
+
+    /* Duas correspondencias por prioridade, mas so ha espaco para 1 no resultado */
+    int n = busca_por_prioridade(lista, 3, 1, res, 1);
+    assert(n == 1);
+    assert(res[0].id == 1);
+
+    printf("[PASS] test_busca_limite_max_resultado\n");
+}
+
 int main(void)
 {
     printf("--- Testes de Validação e Busca ---\n");
@@ -117,6 +188,9 @@ int main(void)
     test_validacao_prioridade();
     test_validacao_intervalo();
     test_busca();
+    test_busca_resultado_vazio();
+    test_busca_multiplos_resultados_todos();
+    test_busca_limite_max_resultado();
     printf("Todos os testes passaram com sucesso!\n");
     return 0;
 }
