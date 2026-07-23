@@ -15,3 +15,7 @@ Thumbs.db
 
 # Compile commands
 compile_commands.json
+
+# Data files (keep directory structure)
+data/*.csv
+data/*.txt

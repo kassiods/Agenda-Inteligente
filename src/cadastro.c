@@ -1,4 +1,5 @@
 #include "cadastro.h"
+#include "persistencia.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -6,10 +7,28 @@ static Evento eventos[MAX_EVENTOS];
 static int qtd_eventos = 0;
 static int proximo_id = 1;
 
+static void salvar_agora(void)
+{
+    persistencia_salvar(eventos, qtd_eventos);
+    persistencia_salvar_proximo_id(proximo_id);
+}
+
 void cadastro_init(void)
 {
-    qtd_eventos = 0;
-    proximo_id = 1;
+    proximo_id = persistencia_carregar_proximo_id();
+    qtd_eventos = persistencia_carregar(eventos, MAX_EVENTOS);
+    if (qtd_eventos > 0) {
+        /* Encontrar o maior ID existente para garantir consistência */
+        int maior_id = 0;
+        for (int i = 0; i < qtd_eventos; i++) {
+            if (eventos[i].id > maior_id) {
+                maior_id = eventos[i].id;
+            }
+        }
+        if (proximo_id <= maior_id) {
+            proximo_id = maior_id + 1;
+        }
+    }
 }
 
 int cadastro_adicionar(const char *titulo, int dia, int mes, int ano,
@@ -36,6 +55,7 @@ int cadastro_adicionar(const char *titulo, int dia, int mes, int ano,
     e->prioridade = prioridade;
     qtd_eventos++;
 
+    salvar_agora();
     return 1;
 }
 
@@ -58,6 +78,7 @@ int cadastro_editar(int id, const char *titulo, int dia, int mes, int ano,
             eventos[i].hora = hora;
             eventos[i].minuto = minuto;
             eventos[i].prioridade = prioridade;
+            salvar_agora();
             return 1;
         }
     }
@@ -70,6 +91,7 @@ int cadastro_remover(int id)
         if (eventos[i].id == id) {
             eventos[i] = eventos[qtd_eventos - 1];
             qtd_eventos--;
+            salvar_agora();
             return 1;
         }
     }
