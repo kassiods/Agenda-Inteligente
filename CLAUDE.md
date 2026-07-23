@@ -6,6 +6,19 @@ Projeto acadêmico em **C**: uma agenda de linha de comando que cadastra eventos
 
 Trello do projeto: https://trello.com/b/21WYrsiF/agenda-inteligente
 
+## Status atual (última atualização: 23/07/2026, por Kassio)
+
+**Semana 1 (16/07–23/07): concluída.** Todos os módulos base foram implementados e mergeados na `main`: setup do projeto, cadastro de eventos (CRUD — Elton), persistência em arquivo (Evillyn), módulo inteligente de prioridade/conflito/lembretes (Nailan) e busca/filtro + validação (Lincoln). A integração de tudo no `main.c` também foi concluída (Kassio, commit `d5907d6`): o programa compila sem warnings, mostra o resumo de eventos do dia/atrasados/conflitos automaticamente ao abrir, e tem as 10 opções de menu (CRUD, buscas, ordenar por prioridade/data, ver conflitos).
+
+**Semana 2 (24/07–30/07): em andamento.** Cards restantes na "Sprint Atual" do Trello nesta data:
+- [Elton] Testes do módulo de cadastro (casos extremos)
+- [Evillyn] Testes de persistência (arquivo vazio/corrompido)
+- [Nailan] Lembretes de eventos do dia/atrasados (refinar mensagens)
+- [Lincoln] Testes de busca/filtro + revisão de UX do menu
+- [Kassio] Documentação final + ensaio da apresentação
+
+Numa sessão nova: **antes de assumir que ainda há trabalho pendente, consultar o Trello** (board acima) para ver o estado real dos cards — esta lista pode já estar desatualizada. Se todos os cards da "Sprint Atual" tiverem sido movidos para "Concluído", a sprint (e o MVP do projeto) está fechada.
+
 ## Escopo do MVP
 
 - Cadastro de eventos (título, data, hora, prioridade): adicionar, editar, remover, listar.
