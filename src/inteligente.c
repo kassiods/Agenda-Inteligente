@@ -110,15 +110,31 @@ int inteligente_eventos_do_dia(const Evento *eventos, int qtd,
     for (int i = 0; i < qtd; i++) {
         if (eventos[i].dia == dia && eventos[i].mes == mes &&
             eventos[i].ano == ano) {
-            printf("[%d] %02d:%02d - %s (Prioridade: %d)\n",
+            const char *prior[] = {"", "Alta", "Media", "Baixa"};
+            int p = (eventos[i].prioridade >= 1 && eventos[i].prioridade <= 3)
+                        ? eventos[i].prioridade
+                        : 0;
+
+            printf("  [%d] %02d:%02d - %s (Prioridade: %s)",
                    eventos[i].id, eventos[i].hora, eventos[i].minuto,
-                   eventos[i].titulo, eventos[i].prioridade);
+                   eventos[i].titulo, prior[p]);
+
+            if (eventos[i].hora < 12) {
+                printf(" * Manha *");
+            } else if (eventos[i].hora < 18) {
+                printf(" * Tarde *");
+            } else {
+                printf(" * Noite *");
+            }
+            printf("\n");
             encontrados++;
         }
     }
 
     if (encontrados == 0) {
         printf("Nenhum evento para hoje.\n");
+    } else {
+        printf("\nVoce tem %d evento(s) hoje. Nao esqueca!\n", encontrados);
     }
 
     return encontrados;
@@ -140,16 +156,34 @@ int inteligente_eventos_atrasados(const Evento *eventos, int qtd,
                                    eventos[i].ano, eventos[i].hora,
                                    eventos[i].minuto);
         if (evento < hoje) {
-            printf("[%d] %02d/%02d/%04d %02d:%02d - %s\n",
+            long diferenca = hoje - evento;
+            int dias_atraso = (int)(diferenca / (24 * 60));
+            const char *prior[] = {"", "Alta", "Media", "Baixa"};
+            int p = (eventos[i].prioridade >= 1 && eventos[i].prioridade <= 3)
+                        ? eventos[i].prioridade
+                        : 0;
+
+            printf("  [%d] %02d/%02d/%04d %02d:%02d - %s (Prioridade: %s)",
                    eventos[i].id, eventos[i].dia, eventos[i].mes,
                    eventos[i].ano, eventos[i].hora, eventos[i].minuto,
-                   eventos[i].titulo);
+                   eventos[i].titulo, prior[p]);
+
+            if (dias_atraso == 0) {
+                printf(" [Atrasado hoje]");
+            } else if (dias_atraso == 1) {
+                printf(" [1 dia de atraso]");
+            } else {
+                printf(" [%d dias de atraso]", dias_atraso);
+            }
+            printf("\n");
             atrasados++;
         }
     }
 
     if (atrasados == 0) {
-        printf("Nenhum evento atrasado.\n");
+        printf("Nenhum evento atrasado. Tudo em dia!\n");
+    } else {
+        printf("\nAtencao: voce tem %d evento(s) atrasado(s).\n", atrasados);
     }
 
     return atrasados;
@@ -157,13 +191,14 @@ int inteligente_eventos_atrasados(const Evento *eventos, int qtd,
 
 void inteligente_resumo(const Evento *eventos, int qtd,
                         int dia, int mes, int ano) {
-    printf("\n========================================\n");
+    printf("\n============================================\n");
     printf("       RESUMO DA AGENDA INTELIGENTE\n");
-    printf("========================================\n");
+    printf("============================================\n");
+    printf("  Data: %02d/%02d/%04d\n", dia, mes, ano);
 
     inteligente_eventos_do_dia(eventos, qtd, dia, mes, ano);
     inteligente_eventos_atrasados(eventos, qtd, dia, mes, ano);
     inteligente_listar_conflitos(eventos, qtd);
 
-    printf("========================================\n\n");
+    printf("============================================\n\n");
 }
