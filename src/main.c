@@ -1,8 +1,19 @@
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include "cadastro.h"
 #include "validacao.h"
 #include "busca.h"
+#include "inteligente.h"
+
+static void obter_data_atual(int *dia, int *mes, int *ano)
+{
+    time_t agora = time(NULL);
+    struct tm *t = localtime(&agora);
+    *dia = t->tm_mday;
+    *mes = t->tm_mon + 1;
+    *ano = t->tm_year + 1900;
+}
 
 static void imprimir_evento(const Evento *e)
 {
@@ -230,10 +241,41 @@ static void cmd_buscar_intervalo(void)
     }
 }
 
+static void cmd_ordenar(void)
+{
+    Evento lista[MAX_EVENTOS];
+    int n = cadastro_listar(lista, MAX_EVENTOS);
+
+    if (n == 0) {
+        printf("Nenhum evento cadastrado.\n");
+        return;
+    }
+
+    inteligente_ordenar(lista, n);
+
+    printf("Eventos ordenados por prioridade e data (%d):\n", n);
+    for (int i = 0; i < n; i++) {
+        imprimir_evento(&lista[i]);
+    }
+}
+
+static void cmd_conflitos(void)
+{
+    Evento lista[MAX_EVENTOS];
+    int n = cadastro_listar(lista, MAX_EVENTOS);
+    inteligente_listar_conflitos(lista, n);
+}
+
 int main(void)
 {
     cadastro_init();
     int opcao;
+
+    Evento lista[MAX_EVENTOS];
+    int n = cadastro_listar(lista, MAX_EVENTOS);
+    int dia, mes, ano;
+    obter_data_atual(&dia, &mes, &ano);
+    inteligente_resumo(lista, n, dia, mes, ano);
 
     do {
         printf("\n=== Agenda Inteligente ===\n");
@@ -245,6 +287,8 @@ int main(void)
         printf("6 - Buscar por prioridade\n");
         printf("7 - Buscar por palavra-chave\n");
         printf("8 - Buscar por intervalo de datas\n");
+        printf("9 - Ordenar eventos por prioridade e data\n");
+        printf("10 - Ver conflitos de horario\n");
         printf("0 - Sair\n");
         printf("Opcao: ");
         if (scanf("%d", &opcao) != 1) {
@@ -261,6 +305,8 @@ int main(void)
         case 6: cmd_buscar_prioridade(); break;
         case 7: cmd_buscar_palavra_chave(); break;
         case 8: cmd_buscar_intervalo(); break;
+        case 9: cmd_ordenar(); break;
+        case 10: cmd_conflitos(); break;
         case 0: printf("Saindo...\n"); break;
         default: printf("Opcao invalida.\n"); break;
         }
