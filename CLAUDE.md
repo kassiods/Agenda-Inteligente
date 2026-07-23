@@ -10,14 +10,18 @@ Trello do projeto: https://trello.com/b/21WYrsiF/agenda-inteligente
 
 **Semana 1 (16/07–23/07): concluída.** Todos os módulos base foram implementados e mergeados na `main`: setup do projeto, cadastro de eventos (CRUD — Elton), persistência em arquivo (Evillyn), módulo inteligente de prioridade/conflito/lembretes (Nailan) e busca/filtro + validação (Lincoln). A integração de tudo no `main.c` também foi concluída (Kassio, commit `d5907d6`): o programa compila sem warnings, mostra o resumo de eventos do dia/atrasados/conflitos automaticamente ao abrir, e tem as 10 opções de menu (CRUD, buscas, ordenar por prioridade/data, ver conflitos).
 
-**Semana 2 (24/07–30/07): em andamento.** Cards restantes na "Sprint Atual" do Trello nesta data:
-- [Elton] Testes do módulo de cadastro (casos extremos)
-- [Evillyn] Testes de persistência (arquivo vazio/corrompido)
-- [Nailan] Lembretes de eventos do dia/atrasados (refinar mensagens)
-- [Lincoln] Testes de busca/filtro + revisão de UX do menu
-- [Kassio] Documentação final + ensaio da apresentação
+**Semana 2 (24/07–30/07): quase fechada.** Nesta data, todos os cards de teste da Sprint Atual já foram concluídos e mergeados na `main` (commit `28e77b3`):
+- ~~[Elton] Testes do módulo de cadastro (casos extremos)~~ — `tests/test_cadastro.c`
+- ~~[Evillyn] Testes de persistência (arquivo vazio/corrompido)~~ — `tests/test_persistencia.c`
+- ~~[Nailan] Lembretes de eventos do dia/atrasados (refinar mensagens)~~
+- ~~[Lincoln] Testes de busca/filtro + revisão de UX do menu~~ — casos de resultado vazio/limite adicionados em `tests/test_busca_validacao.c`
 
-Numa sessão nova: **antes de assumir que ainda há trabalho pendente, consultar o Trello** (board acima) para ver o estado real dos cards — esta lista pode já estar desatualizada. Se todos os cards da "Sprint Atual" tiverem sido movidos para "Concluído", a sprint (e o MVP do projeto) está fechada.
+Só falta **1 card** para fechar a sprint (e o MVP):
+- [Kassio] Documentação final + ensaio da apresentação — atualizar README, revisar este CLAUDE.md, preparar roteiro de demonstração do programa.
+
+`make test` roda as 3 suítes de teste (busca, cadastro, persistência); todas passam sem warnings com `-Wall -Wextra`.
+
+Numa sessão nova: **antes de assumir que ainda há trabalho pendente, consultar o Trello** (board acima) para ver o estado real dos cards — esta lista pode já estar desatualizada. Se o card do Kassio também tiver sido movido para "Concluído", a sprint (e o MVP do projeto) está fechada.
 
 ## Escopo do MVP
 
